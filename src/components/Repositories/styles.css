@@ -1,0 +1,36 @@
+#main .repositories {
+  max-width: 480px;
+  margin: 2rem auto;
+}
+
+#main .repositories .title {
+  font-size: 2rem;
+  text-align:  center;
+}
+
+#main .repositories .list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+#main .repositories .item {
+  display: flex;
+  align-items: center;
+  background-color: #7a7ac299;
+  border-bottom: .1rem solid #7a7ac299;
+  padding: .5rem;
+  border-radius: .3rem;
+}
+
+#main .repositories .item:last-child {
+  border-bottom: none;
+}
+
+#main .repositories .item .info {
+  flex: 1;
+}
+
+#main .repositories .item .name {
+  font-size: 1.5rem;
+}

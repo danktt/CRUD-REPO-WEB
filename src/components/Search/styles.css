@@ -1,0 +1,19 @@
+
+#main .search{
+  display: flex;
+  justify-content: center;
+  margin: 2rem auto;
+  max-width: 480px;
+  background-color: #7a7ac299;
+  padding: .5rem;
+  gap: .5rem;
+  border-radius: .3rem;
+}
+
+#main label {
+  flex-shrink: 0;
+}
+
+#main input {
+  width: 100%;
+}

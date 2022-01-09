@@ -1,0 +1,13 @@
+#main .nav {
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem;
+  background-color: #7a7ac299;
+  align-items: center;
+
+}
+
+#main .nav .logo {
+  font-family: 'Island Moments', cursive;
+  font-size: 3rem;
+}

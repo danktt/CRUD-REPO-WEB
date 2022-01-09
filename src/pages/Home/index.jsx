@@ -1,59 +1,90 @@
 
+import { useContext, useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import Navbar from '../../components/Navbar/Navbar';
+import NewRep from '../../components/NewRepo/NewRepo';
+import Repo from '../../components/Repositories/Repo';
+import Search from '../../components/Search/search';
+import { AuthContext } from '../../contexts/auth';
+import { getRepositories, destroyRepository } from '../../services/api';
 import './styles.css';
+
+
+
+
 
 const Home = () => {
 
+  const { user } = useContext(AuthContext);
+
+  const [repositories, setRepositories] = useState([]);
+  const [ loading, setLoading ] = useState(true);
+  const [ loadingError, setLoadingError ] = useState(false);
+
+  const loadData = async (query = '') => {
+    try {
+      const response = await getRepositories(user?.id , query);
+      setRepositories(response.data)
+      setLoading(false)
+    } catch (error) {
+      console.error(error)
+      setLoadingError(true)
+    }
+  }
+
+
+  useEffect(() => {
+    (async () => await loadData())();
+  },[])
+
+
   const handleSearch = (query) => {
-    console.log('query',query);
+    loadData(query)
+  }
+  
+  const handleLogout = () => {
+    console.log('saiu');
   }
 
-  const handleClear = () => {
-    console.log('clear');
+
+  const handleDeleteRepo = async (repository) => {
+    console.log('delete Repo', repository);
+    await destroyRepository(user?.id, repository._id)
+    await loadData();
   }
 
-  const handleDelete = () => {
-    console.log('delete');
+  if(loadingError) {
+    return (
+      <div className="loading">
+        <h1>Erro ao carregar os dados 🤕 <Link to="/">Voltar</Link>.</h1>
+      </div>
+    )
   }
+
+  if(loading){
+    return (
+      <div className="loading">🏃‍♂️ Carregando...</div>
+    )
+  }
+
 
   return ( 
     <div id="main">
-      <div className="nav">
-        <h1 className="logo">Repo Of DevS</h1>
-        <button onClick={()=>{console.log("Logout")}}>Sair</button>
-    </div>
+      <Navbar onLogout={handleLogout} />
 
-    <div className="search">
-         <label htmlFor="query">Procurar:</label>
-         <input 
-          type="search" 
-          name="query" 
-          id="query" 
-          />
-         <button onClick={handleClear}>Limpar</button>
-         <button onClick={handleSearch}>Procurar</button>  
-    </div> 
+      <Search onSearch={handleSearch} />
+    
+      <Repo onDeleteRepo={handleDeleteRepo} repositories={repositories} />
+    
 
-    <div className="repositories">
-      <h2 className="title">Repositórios</h2>
+      <NewRep 
+        loading={loading}
+        setLoading={setLoading}
+        setLoadingError={setLoadingError}   
+        loadData={loadData}
+      />
 
-      <ul className="list">
-        <li className="item">
-          <div className="info">
-            <div className="owner">Github</div>
-            <div className="name">NodeJs</div>
-          </div>
-          <button onClick={handleDelete}>Apagar</button>
-        </li>
-      </ul>
-    </div>
-
-
-
-    <div className="new">
-      <label htmlFor="new-repo">Novo Repo:</label>
-      <input type="url" name="new-repo" id="new-repo"/>
-      <button>Adicionar</button>
-    </div>
+    
       
     </div>
     
